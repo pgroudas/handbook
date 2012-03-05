@@ -9,8 +9,9 @@ A simple, work-in-progress guide to using Mortar Hawk.
 
 * [Adding Parameters to Your Script](#parameters)
 
-# Adding Parameters to Your Script
 <a name='parameters'></a>
+# Adding Parameters to Your Script
+
 
 You'll often want to run a script on different data sets or with different conditions.  Script parameters allow you to run the same Hawk script with different parameters.
 
