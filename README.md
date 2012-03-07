@@ -15,7 +15,10 @@ A simple, work-in-progress guide to using Mortar Hawk.
 
 You'll often want to run a script on different data sets or with different conditions.  Script parameters allow you to run the same Hawk script with different parameters.
 
-Let's take an example of a script that analyzes New York Stock Exchange (NYSE) data.  Imagine that we have a script that analyzes data for only the Apple Inc. (APPL) stock:
+ 
+### Before Parameterization
+
+Let's take an example of a script that processes New York Stock Exchange (NYSE) data.  Imagine that our script is filtered to look at data for only the Apple Inc. (APPL) stock.  Before being parameterized, our script looks like:
 
     -- load up the NYSE daily price data    
 	nyse_daily_prices = LOAD 's3n://hawk-example-data/NYSE/daily_prices' 
@@ -29,7 +32,9 @@ Let's take an example of a script that analyzes New York Stock Exchange (NYSE) d
     my_stock_only = FILTER nyse_daily_prices BY stock_symbol == 'APPL';
 
 
-Let's parameterize this script to make it run on **any** stock.  We'll add a script parameter at the top of the script:
+### After Parameterization
+
+Let's parameterize this script to make it run on **any** stock.  We'll add a parameter called `STOCK_TO_ANALYZE` to the top of the script:
 
 	-- create a parameter
 	%default STOCK_TO_ANALYZE "APPL";
