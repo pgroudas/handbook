@@ -1,4 +1,4 @@
--- macro to get NYSE data for a given year
+-- macro to get NYSE data between two years
 DEFINE get_nyse_for_years(first_year, last_year)
 returns filtered_year_prices {
     

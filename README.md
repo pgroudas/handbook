@@ -61,9 +61,8 @@ Now, whenever we launch this job, Hawk will let us define the stock we want to a
 [Pig macros](http://ofps.oreilly.com/titles/9781449302641/advanced_pig_latin.html#macros) help you break up large pig scripts into modular, reusable chunks.
 
 ## A Simple Example
-Let's look at an example where a macro would be helpful.  Imagine that, using our NYSE data, we'd like to write a script that can get the price data for any range of years.  We can do this with a macro.  The macro would look like:
+Let's look at an example where a macro would be helpful.  Imagine that, using our NYSE data, we'd like to get the price data for any range of years.  We can put this code into a macro that looks like:
 
-	-- macro to get NYSE data for a given year
 	DEFINE get_nyse_for_years(first_year, last_year)
 	returns filtered_year_prices {
 		
@@ -98,7 +97,6 @@ We'll store this macro script in our S3 bucket at `s3n://hawk-example-data/NYSE/
 
 You'll often want to return more than one relation from your macro. This happens particularly often when grouping data.  For example, in the following macro we need to expose both the `grouped_by_symbol` relation **and** the `nyse_daily_prices` to let callers use the grouped results:
 
-	-- macro to get NYSE data for a given year
 	DEFINE get_stocks_by_symbol()
 	returns nyse_daily_prices, grouped_by_symbol {
 	
