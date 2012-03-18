@@ -9,6 +9,7 @@ A simple, work-in-progress guide to using Mortar Hawk.
 
 * [Adding Parameters to Your Script](#parameters)
 * [Using Pig Macros](#macros)
+* [Using Python from S3] (#s3_python)
 
 <a name='parameters'></a>
 # Adding Parameters to Your Script
@@ -126,6 +127,60 @@ Here's how we'd call this macro from our pig script:
 				   GENERATE group AS symbol,
 				   	    AVG(nyse_prices.stock_price_close) AS average_price;
 
+
+
+<a name='s3_python'></a>
+#Using Python from S3
+
+Storing commonly used Python in S3 is an easy way to reuse code across different scripts and to share code between different Hawk users.
+
+## An exciting example
+
+Here's a simple script that operates on the excite search data included in Hawk and calculates the average length of words in each user's queries.
+
+Pig:
+
+    -- Load up the search log data
+    searches = LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' USING PigStorage('\t') AS (user_id:chararray, timestamp:chararray, query:chararray);
+    
+    -- Group searches by user.
+    user_searches = GROUP searches by user_id;
+    
+    -- Calculate average search length for each user.
+    avg_word_length =  FOREACH user_searches
+                       GENERATE avg_word_length(searches) as avg_word_length;
+
+Python:
+
+    @outputSchema('avg_word_length:double')
+    def avg_word_length(bag):
+        """
+        Get the average word length in each search.
+        """
+        num_chars_total = 0
+        num_words_total = 0
+        for tpl in bag:
+            query = tpl[2]
+            words = query.split(' ')
+            num_words = len(words)
+            num_chars = sum([len(word) for word in words])
+    
+            num_words_total += num_words
+            num_chars_total += num_chars
+    
+        return float(num_chars_total) / float(num_words_total)
+
+After writing this script it might turn out that we find another use for our avg_word_length UDF.  The easiest option for sharing this code is to move it into a separate file that can be shared through S3.
+
+## Creating a Shareable Python File.
+
+First, we need to create a file that contains all of our udf's python code.  In our case we'll call it <i>word_udfs.py</i> and copy all of the above python code into that file.
+
+Second, we need to provide the python definition for the outputSchema annotation.  To do this, we'll add at the very top of <i>word_udfs.py</i> the line:  
+
+    from pig_util import outputSchema
+    
+If you're interested in running this script locally you can find  [pig_util.py here](https://github.com/mortardata/handbook/raw/...).  Just download the file to the same directory as <i>word_udfs.py</i>.
 
 
 
