@@ -127,8 +127,6 @@ Here's how we'd call this macro from our pig script:
 				   GENERATE group AS symbol,
 				   	    AVG(nyse_prices.stock_price_close) AS average_price;
 
-
-
 <a name='s3_python'></a>
 #Using Python from S3
 
@@ -180,7 +178,27 @@ Second, we need to provide the python definition for the outputSchema annotation
 
     from pig_util import outputSchema
     
-If you're interested in running this script locally you can find  [pig_util.py here](https://github.com/mortardata/handbook/raw/...).  Just download the file to the same directory as <i>word_udfs.py</i>.
+If you're interested in running this script locally you can find  [pig_util.py here](https://github.com/mortardata/handbook/raw/master/code/pig_util.py).  Just download the file to the same directory as <i>word_udfs.py</i>.
 
+Finally, we'll need to upload the python file to an S3 location that is accessible from our Hawk account.  For our purposes we'll use: s3n://hawk-example-data/shared_code/word_udfs.py.
 
+## Registering the Python File in Hawk
+
+Now that we have our s3 accessible python file we can write our original pig script like so:
+
+Pig:
+    
+    REGISTER 's3n://hawk-example-data/shared_code/word_udfs.py' using streaming_python;
+
+    -- Load up the search log data
+    searches = LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' USING PigStorage('\t') AS (user_id:chararray, timestamp:chararray, query:chararray);
+    
+    user_searches = GROUP searches by user_id;
+    
+    avg_word_length =  FOREACH user_searches
+                    GENERATE avg_word_length(searches) as avg_word_length;
+
+and leave the Python section blank.
+
+If you have a script that uses some shared python UDFs stored in S3 and some custom UDFs defined in the Python section of Hawk the only restriction is that all UDFs must be distinctly named (similar to if all python code was defined in one single file).
 
