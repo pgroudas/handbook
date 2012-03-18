@@ -139,7 +139,9 @@ Here's a simple script that operates on the excite search data included in Hawk 
 Pig:
 
     -- Load up the search log data
-    searches = LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' USING PigStorage('\t') AS (user_id:chararray, timestamp:chararray, query:chararray);
+    searches =  LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' 
+               USING PigStorage('\t') 
+                  AS (user_id:chararray, timestamp:chararray, query:chararray);
     
     -- Group searches by user.
     user_searches = GROUP searches by user_id;
@@ -191,7 +193,9 @@ Pig:
     REGISTER 's3n://hawk-example-data/shared_code/word_udfs.py' using streaming_python;
 
     -- Load up the search log data
-    searches = LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' USING PigStorage('\t') AS (user_id:chararray, timestamp:chararray, query:chararray);
+    searches =  LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' 
+               USING PigStorage('\t') 
+                  AS (user_id:chararray, timestamp:chararray, query:chararray);
     
     user_searches = GROUP searches by user_id;
     
