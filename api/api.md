@@ -64,24 +64,45 @@ Get the status of a job.
 	200 OK
 	{
 	  "job_id": "4f4c4afb916eb10526000000",
-	  "script_name": "NYSE Rollup",
-      "cluster_size": "5",      
+	  "name": "NYSE Rollup",
+	  "cluster_size": "5",
 	  "status": "success",
 	  "progress": 100,
 	  "outputs": [
-        {
-      	  "alias": "aggregates_by_stock",
-      	  "records": 2853,
-      	  "location": "s3n://my-output-bucket/2012-03-01/aggregates_by_stock"
-      	},
-      	{
-      	  "alias": "aggregates_by_year",
-      	  "records": 2853,
-      	  "location": "s3n://my-output-bucket/2012-03-01/aggregates_by_year"
-      	}
-      ],
-      "start_timestamp": "2012-02-28T03:35:42.831000+00:00",
-      "stop_timestamp": "2012-02-28T03:41:52.613000+00:00"
+	    {
+	      "alias": "aggregates_by_stock",
+	      "name": "aggregates_by_stock",
+	      "records": 2853,
+	      "location": "s3n://my-output-bucket/2012-03-01/aggregates_by_stock",
+	      "output_blobs" [ 
+	        {
+	          "bucket": "my-output-bucket",
+	          "key": "my-output-bucket/2012-03-01/aggregates_by_stock/part-r-00000",
+	          "output_blob_id": "4f6749d1744ea111151399b4"
+	        }
+	      ]
+	    },
+	    {
+	      "alias": "aggregates_by_year",
+	      "records": 2853,
+	      "location": "s3n://my-output-bucket/2012-03-01/aggregates_by_year",
+	      "output_blobs" [ 
+	        {
+	          "bucket": "my-output-bucket",
+	          "key": "my-output-bucket/2012-03-01/aggregates_by_stock/part-r-00000",
+	          "output_blob_id": "4f6749d1744ea111151399b4"
+	        }
+	    }
+	  ],
+	  "start_timestamp": "2012-02-28T03:35:42.831000+00:00",
+	  "stop_timestamp": "2012-02-28T03:41:52.613000+00:00",
+	  "duration": "6 mins",
+	  "num_hadoop_jobs": 2,
+	  "num_hadoop_jobs_succeeded": 2,
+	  "script_parameters" : {
+	    "MY_INPUT_PARAMETER": "my_input_parameter_value",
+	    "MY_INPUT_PARAMETER_2": "my other value"
+	  }
 	}
 
 The "main success scenario" for a job passes through status codes:
@@ -97,10 +118,12 @@ Error states include the following (error message will be found in the "error" f
 * **execution_error**: An error occurred during the run on the hadoop cluster.
 * **service_error**: An internal error occurred.
 
-Additionly, jobs stopped by a user have the states:
+Additionally, jobs stopped by a user have the states:
 
 * **stopping**:  User has requested that the job be stopped
 * **stopped**: Job is stopped
+
+Since Hadoop may write the output of the job to multiple files the output_blobs list contains one element for each output of the job.  
 
 
 ## Store Script (Coming Soon)
