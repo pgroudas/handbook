@@ -190,7 +190,7 @@ Now that we have our s3 accessible python file we can write our original pig scr
 
 Pig:
     
-    REGISTER 's3n://hawk-example-data/shared_code/word_udfs.py' using streaming_python;
+    REGISTER 's3n://hawk-example-data/tutorial/shared_udfs/word_udfs.py' using streaming_python;
 
     -- Load up the search log data
     searches =  LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' 
