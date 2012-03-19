@@ -154,22 +154,24 @@ Pig:
 Python:
 
     @outputSchema('avg_word_length:double')
-    def avg_word_length(bag):
-        """
-        Get the average word length in each search.
-        """
-        num_chars_total = 0
-        num_words_total = 0
-        for tpl in bag:
-            query = tpl[2]
-            words = query.split(' ')
-            num_words = len(words)
-            num_chars = sum([len(word) for word in words])
-    
-            num_words_total += num_words
-            num_chars_total += num_chars
-    
-        return float(num_chars_total) / float(num_words_total)
+	def avg_word_length(bag):
+    	"""
+    	Get the average word length in each search.
+    	"""
+    	num_chars_total = 0
+    	num_words_total = 0
+    	for tpl in bag:
+        	query = tpl[2] or ''
+        	words = query.split(' ')
+        	num_words = len(words)
+        	num_chars = sum([len(word) for word in words])
+
+        	num_words_total += num_words
+        	num_chars_total += num_chars
+
+    	return float(num_chars_total) / float(num_words_total) \
+        	if num_words_total > 0 \
+        	else 0.0
 
 After writing this script it might turn out that we find another use for our avg_word_length UDF.  The easiest option for sharing this code is to move it into a separate file that can be shared through S3.
 
