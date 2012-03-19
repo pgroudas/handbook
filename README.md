@@ -148,8 +148,8 @@ Pig:
     user_searches = GROUP searches by user_id;
     
     -- Calculate average search length for each user.
-    avg_word_length =  FOREACH user_searches
-                       GENERATE avg_word_length(searches) as avg_word_length;
+    word_length =  FOREACH user_searches
+                  GENERATE avg_word_length(searches) as average_word_length;
 
 Python:
 
@@ -202,8 +202,8 @@ Pig:
     
     user_searches = GROUP searches by user_id;
     
-    avg_word_length =  FOREACH user_searches
-                    GENERATE avg_word_length(searches) as avg_word_length;
+    word_length =  FOREACH user_searches
+                  GENERATE avg_word_length(searches) as average_word_length;
 
 and leave the Python section blank.
 
