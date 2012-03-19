@@ -29,7 +29,7 @@ This section of the API allows you to run and monitor jobs.
 
 Run a script on a freshly provisioned hadoop cluster:
 
-	POST /restapi/v1/jobs
+	POST /v1/jobs
 
 ### Parameters
 
@@ -57,7 +57,7 @@ Run a script on a freshly provisioned hadoop cluster:
 
 Get the details of a single job.
 
-	GET /restapi/v1/jobs/:job_id
+	GET /v1/jobs/:job_id
 
 ### Response
 
@@ -130,7 +130,7 @@ Since Hadoop may write the output of the job to multiple files the output_blobs 
 
 Get the details of all your job.
 
-    GET /restapi/v1/jobs
+    GET /v1/jobs
 
 ### Response
 
@@ -153,7 +153,7 @@ Get the details of all your job.
 
 Store a script into Hawk.
 
-	POST /restapi/v1/scripts/:script_name
+	POST /v1/scripts/:script_name
 
 
 * **script_name**: Unique name for this script.  If a script with the same name exists, it will be overwritten.  Note that spaces are allowed in script names, but they should be URL-encoded.
