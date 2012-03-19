@@ -53,9 +53,9 @@ Run a script on a freshly provisioned hadoop cluster:
 	}
 
 
-## Get Job Status
+## Get Job Details
 
-Get the status of a job.
+Get the details of a single job.
 
 	GET /restapi/v1/jobs/:job_id
 
@@ -126,7 +126,9 @@ Additionally, jobs stopped by a user have the states:
 Since Hadoop may write the output of the job to multiple files the output_blobs list contains one element for each output of the job.  
 
 
-Get the details of all your jobs.
+## Get Details for All Jobs
+
+Get the details of all your job.
 
     GET /restapi/v1/jobs
 
