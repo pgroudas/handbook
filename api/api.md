@@ -126,6 +126,27 @@ Additionally, jobs stopped by a user have the states:
 Since Hadoop may write the output of the job to multiple files the output_blobs list contains one element for each output of the job.  
 
 
+Get the details of all your jobs.
+
+    GET /restapi/v1/jobs
+
+### Response
+
+	200 OK
+	{
+	  "jobs": [
+	    {
+	      "job_id":"4f4c4afb916eb10526000000",
+	      ... All other job details as described above ...
+	    },
+	    {
+	      "job_id":"4f4c4afb916eb10526000001",
+	      ... All other job details as described above ...
+	    }
+	  ]
+	}
+
+
 ## Store Script (Coming Soon)
 
 Store a script into Hawk.
