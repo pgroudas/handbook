@@ -9,7 +9,8 @@ A simple, work-in-progress guide to using Mortar Hawk.
 
 * [Adding Parameters to Your Script](#parameters)
 * [Using Pig Macros](#macros)
-* [Using Python from S3] (#s3_python)
+* [Using Python from S3](#s3_python)
+* [Keeping a Cluster Running for Development](#keep_cluster_running)
 
 <a name='parameters'></a>
 # Adding Parameters to Your Script
@@ -147,28 +148,30 @@ Pig:
     user_searches = GROUP searches by user_id;
     
     -- Calculate average search length for each user.
-    avg_word_length =  FOREACH user_searches
-                       GENERATE avg_word_length(searches) as avg_word_length;
+    word_length =  FOREACH user_searches
+                  GENERATE avg_word_length(searches) as average_word_length;
 
 Python:
 
     @outputSchema('avg_word_length:double')
-    def avg_word_length(bag):
-        """
-        Get the average word length in each search.
-        """
-        num_chars_total = 0
-        num_words_total = 0
-        for tpl in bag:
-            query = tpl[2]
-            words = query.split(' ')
-            num_words = len(words)
-            num_chars = sum([len(word) for word in words])
-    
-            num_words_total += num_words
-            num_chars_total += num_chars
-    
-        return float(num_chars_total) / float(num_words_total)
+	def avg_word_length(bag):
+    	"""
+    	Get the average word length in each search.
+    	"""
+    	num_chars_total = 0
+    	num_words_total = 0
+    	for tpl in bag:
+        	query = tpl[2] or ''
+        	words = query.split(' ')
+        	num_words = len(words)
+        	num_chars = sum([len(word) for word in words])
+
+        	num_words_total += num_words
+        	num_chars_total += num_chars
+
+    	return float(num_chars_total) / float(num_words_total) \
+        	if num_words_total > 0 \
+        	else 0.0
 
 After writing this script it might turn out that we find another use for our avg_word_length UDF.  The easiest option for sharing this code is to move it into a separate file that can be shared through S3.
 
@@ -190,7 +193,7 @@ Now that we have our s3 accessible python file we can write our original pig scr
 
 Pig:
     
-    REGISTER 's3n://hawk-example-data/shared_code/word_udfs.py' using streaming_python;
+    REGISTER 's3n://hawk-example-data/tutorial/shared_udfs/word_udfs.py' using streaming_python;
 
     -- Load up the search log data
     searches =  LOAD 's3n://hawk-example-data/tutorial/excite.log.bz2' 
@@ -199,10 +202,24 @@ Pig:
     
     user_searches = GROUP searches by user_id;
     
-    avg_word_length =  FOREACH user_searches
-                    GENERATE avg_word_length(searches) as avg_word_length;
+    word_length =  FOREACH user_searches
+                  GENERATE avg_word_length(searches) as average_word_length;
 
 and leave the Python section blank.
 
 If you have a script that uses some shared python UDFs stored in S3 and some custom UDFs defined in the Python section of Hawk the only restriction is that all UDFs must be distinctly named (similar to if all python code was defined in one single file).
 
+<a name='keep_cluster_running'></a>
+# Keeping a Cluster Running for Development
+
+Generally, Hawk jobs are run on single-use, per-job Hadoop clusters.  However, as you're developing, it can be helpful to keep a cluster running to rapidly test modifications to your scripts without waiting for a new cluster to launch.
+
+To keep a cluster running, all you need to do is check the "Keep cluster running after job finishes" checkbox when running your job:
+
+![Keep Cluster Running After Job Finishes](https://github.com/mortardata/handbook/raw/master/assets/keep_cluster_running/run_job-keep_cluster_running.png)
+
+As soon as the cluster for your job has started, you will be able to use it for any new jobs as well.  To do so, select an "Existing Cluster" option from the "Hadoop Cluster" dropdown on the Run Job popup:
+
+![Run on Existing Cluster](https://github.com/mortardata/handbook/raw/master/assets/keep_cluster_running/run_job-existing_cluster.png)
+
+Hawk will automatically shut down your cluster after it is idle (no jobs running) for 1 hour.
