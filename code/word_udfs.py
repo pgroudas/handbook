@@ -1,3 +1,5 @@
+from pig_util import outputSchema
+
 @outputSchema('avg_word_length:double')
 def avg_word_length(bag):
     """
