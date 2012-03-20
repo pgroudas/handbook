@@ -65,7 +65,7 @@ Get the details of a single job.
 	{
 	  "job_id": "4f4c4afb916eb10526000000",
 	  "name": "NYSE Rollup",
-	  "cluster_size": "5",
+	  "cluster_size": 5,
 	  "status": "success",
 	  "progress": 100,
 	  "outputs": [
