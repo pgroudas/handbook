@@ -47,14 +47,14 @@ If "1MM song dataset" is not open, select it from the menu option Scripts=>Open.
 Scroll through the Pig code, each statement builds on the statement before. If you're familiar with SQL, it should read easily: Load the data from s3, filter it, apply a Python calculation to each row, order the rows, retain the top 50 rows, store the top 50 rows to s3.
 
 ### Illustrate
-Highlight one of the Pig variables, `top_density` for example. Click the Illustrate button at the top right. ![Illustrate button](http://dl.dropbox.com/u/155396/button-illustrate.png)
+Highlight one of the Pig variables, `top_density` for example. Click the Illustrate button at the top right. ![Illustrate button](https://github.com/mortardata/handbook/raw/master/assets/demo-script/button-illustrate.png)
 
 Illustrate will check that your code will run, and will show you the data flowing through each step of your script (load, filter, etc.) until it reaches `top_density`. Illustrate will take less than a minute to do sophisticated sampling; much faster than manually curating the subset of the data yourself.
 
 ### Run
 To make the run finish faster, switch the 'songs' alias to load one file `s3n://tbmmsd/A.tsv.a` instead of the full dataset.
 
-Click the Run button. ![Run button](http://dl.dropbox.com/u/155396/button-run.png)
+Click the Run button. ![Run button](https://github.com/mortardata/handbook/raw/master/assets/demo-script/button-run.png)
 
 Select the number of nodes (machines) you want to parallelize work on. Five nodes should be sufficient for completion of the entire million song dataset in an hour; if you're running on just one file, three nodes will complete in a few minutes.
 
@@ -79,7 +79,7 @@ Click "Account & Settings" in the upper right of the Mortar screen. Provide the 
 
 You can find your AWS keys on the [Amazon Security Credentials](https://aws-portal.amazon.com/gp/aws/securityCredentials) page in the Access Credentials section.
 
-![AWS Key Console](http://dl.dropbox.com/u/155396/aws-access-keys.png)
+![AWS Key Console](https://github.com/mortardata/handbook/raw/master/assets/scratch-script/aws-access-keys.png)
 
 ### Set up S3
 Download the  [Austin Daily Weather](http://dl.dropbox.com/u/155396/central_texas_daily_weather.tsv.bz2) dataset and then upload it into your s3 bucket. [s3cmd](http://s3tools.org/s3cmd) and [Transmit](https://panic.com/transmit/) (recommended) work well to upload directly to s3.
@@ -88,7 +88,7 @@ Download the  [Austin Daily Weather](http://dl.dropbox.com/u/155396/central_texa
 
 Download and install [Transmit](https://panic.com/transmit/). Launch it, and provide the same Access Key and Secret Access Key you used in the prior step. You can leave the Initial Path field empty.
 
-![Transmit AWS Key Entry](http://dl.dropbox.com/u/155396/transmit-keys.png)
+![Transmit AWS Key Entry](https://github.com/mortardata/handbook/raw/master/assets/scratch-script/transmit-keys.png)
 
 Drop the Austin Daily Weather file you just downloaded `central_texas_daily_weather.tsv.bz2` into an S3 bucket, for example `weather-example`.
 
@@ -143,7 +143,7 @@ Click Illustrate again, observe what the script does.
 ### Run
 If you are satisfied, click the Run button. Select just 2 nodes, which is sufficient since the dataset is rather small. Check the box to "Keep cluster running after job finishes". The cluster will shut itself off when it has been idle for an hour. Press the Run button. When the run completes, download the results from the Job detail page. Notice that most of the hottest days are not in in the last decade!
 
-![Download Results](http://dl.dropbox.com/u/155396/hottest-download-results.png)
+![Download Results](https://github.com/mortardata/handbook/raw/master/assets/scratch-script/hottest-download-results.png)
 
 ### Python
 What if we want to see the average tempurature for the year? We need to parse the date string. In the Python window, put 
